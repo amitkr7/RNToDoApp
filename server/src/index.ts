@@ -1,6 +1,6 @@
 import express from 'express';
 import './db';
-import Note from './models/note';
+import Note, { NoteDocument } from './models/note';
 
 const app = express();
 
@@ -11,13 +11,23 @@ app.get('/', (req, res) => {
   res.send('<h1>Initial Setup<h1>');
 });
 
-app.post('/create', async (req, res) => {
-  const newNote = new Note({
-    title: req.body.title,
-    description: req.body.description,
-  });
+interface IncomingBody {
+  title: string;
+  description?: string;
+}
 
-  await newNote.save();
+app.post('/create', async (req, res) => {
+  //   const newNote = new Note<NoteDocument>({
+  //     title: (req.body as IncomingBody).title,
+  //     description: (req.body as IncomingBody).description,
+  //   });
+
+  //   await newNote.save();
+
+  await Note.create<NoteDocument>({
+    title: (req.body as IncomingBody).title,
+    description: (req.body as IncomingBody).description,
+  });
 
   res.json({ message: 'Created Notes' });
 });
