@@ -7,10 +7,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-  res.send('<h1>Initial Setup<h1>');
-});
-
 interface IncomingBody {
   title: string;
   description?: string;
