@@ -32,6 +32,26 @@ app.post('/create', async (req, res) => {
   res.json({ message: 'Created Notes' });
 });
 
+app.patch('/:noteId', async (req, res) => {
+  const { noteId } = req.params;
+  const { title, description } = req.body as IncomingBody;
+
+  //   const note = await Note.findById(noteId);
+  //   title && (note.title = title);
+  //   description && (note.description = description);
+
+  const note = await Note.findByIdAndUpdate(
+    noteId,
+    { title, description },
+    { new: true }
+  );
+  if (!note) return res.json({ error: 'No Note found' });
+
+  await note.save();
+
+  res.json({ note });
+});
+
 app.listen(8000, () => {
   console.log('Listening on Port 8000');
 });
