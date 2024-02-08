@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import Button from './Button';
 
 interface Props {
   title?: string;
@@ -9,9 +10,27 @@ const NoteItem: FC<Props> = ({ title }) => {
     <div className='shadow-md rounded p-5 space-y-4'>
       <div className='font-semibold text-gray-700 text-lg mb-4'>{title}</div>
       <div className='space-x-4'>
-        <button className='bg-blue-500 text-white p-2 rounded'>View</button>
-        <button className='bg-gray-700 text-white p-2 rounded'>Edit</button>
-        <button className='bg-red-500 text-white p-2 rounded'>Delete</button>
+        <Button
+          name='View'
+          type='primary'
+          onClick={() => {
+            console.log('View');
+          }}
+        />
+        <Button
+          name='Edit'
+          type='secondary'
+          onClick={() => {
+            console.log('View');
+          }}
+        />
+        <Button
+          name='Delete'
+          type='danger'
+          onClick={() => {
+            console.log('View');
+          }}
+        />
       </div>
     </div>
   );
