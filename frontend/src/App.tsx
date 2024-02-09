@@ -3,6 +3,9 @@ import { useState, ChangeEventHandler, FormEventHandler } from 'react';
 import NoteItem from './components/NoteItem';
 
 const App = () => {
+  const [notes, setNotes] = useState<
+    { id: string; title: string; description?: string }[]
+  >([]);
   const [values, setValues] = useState({ title: '', description: '' });
 
   const handleChange: ChangeEventHandler<
@@ -14,10 +17,12 @@ const App = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:8000/note/create', {
+    const { data } = await axios.post('http://localhost:8000/note/create', {
       title: values.title,
       description: values.description,
     });
+    setNotes([data.note, ...notes]);
+    setValues({ title: '', description: '' });
   };
   return (
     <div className='max-w-3xl mx-auto space-y-6'>
@@ -49,8 +54,9 @@ const App = () => {
           </button>
         </div>
       </form>
-
-      <NoteItem title='Note Title' />
+      {notes.map((note, index) => {
+        return <NoteItem title={note.title} key={index} />;
+      })}
     </div>
   );
 };

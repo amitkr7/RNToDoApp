@@ -14,12 +14,18 @@ export const addNote: RequestHandler = async (req, res) => {
 
   //   await newNote.save();
 
-  await Note.create<NoteDocument>({
+  const newNote = await Note.create<NoteDocument>({
     title: (req.body as IncomingBody).title,
     description: (req.body as IncomingBody).description,
   });
 
-  res.json({ message: 'Created Notes' });
+  res.json({
+    note: {
+      id: newNote._id,
+      title: newNote.title,
+      description: newNote.description,
+    },
+  });
 };
 
 export const updateNote: RequestHandler = async (req, res) => {
