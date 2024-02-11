@@ -59,7 +59,15 @@ export const deleteSingleNote: RequestHandler = async (req, res) => {
 
 export const getAllNotes: RequestHandler = async (req, res) => {
   const notes = await Note.find();
-  res.json({ notes });
+  res.json({
+    notes: notes.map((note) => {
+      return {
+        id: note._id,
+        title: note.title,
+        description: note.description,
+      };
+    }),
+  });
 };
 
 export const getSingleNote: RequestHandler = async (req, res) => {
