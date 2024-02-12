@@ -3,9 +3,10 @@ import Button from './Button';
 
 interface Props {
   title?: string;
+  onEditClick?(): void;
 }
 
-const NoteItem: FC<Props> = ({ title }) => {
+const NoteItem: FC<Props> = ({ title, onEditClick }) => {
   return (
     <div className='shadow-md rounded p-5 space-y-4'>
       <div className='font-semibold text-gray-700 text-lg mb-4'>{title}</div>
@@ -17,13 +18,7 @@ const NoteItem: FC<Props> = ({ title }) => {
             console.log('View');
           }}
         />
-        <Button
-          name='Edit'
-          type='secondary'
-          onClick={() => {
-            console.log('View');
-          }}
-        />
+        <Button name='Edit' type='secondary' onClick={onEditClick} />
         <Button
           name='Delete'
           type='danger'

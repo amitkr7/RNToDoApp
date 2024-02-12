@@ -12,6 +12,7 @@ const App = () => {
     { id: string; title: string; description?: string }[]
   >([]);
   const [values, setValues] = useState({ title: '', description: '' });
+  const [selectedId, setSelectedId] = useState('');
 
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -22,6 +23,26 @@ const App = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    if (selectedId) {
+      const { data } = await axios.patch(
+        'http://localhost:8000/note/' + selectedId,
+        {
+          title: values.title,
+          description: values.description,
+        }
+      );
+
+      const updatedNotes = notes.map((note) => {
+        if (note.id === selectedId) {
+          (note.title = data.note.title),
+            (note.description = data.note.description);
+        }
+        return note;
+      });
+      setNotes([...updatedNotes]);
+      setValues({ title: '', description: '' });
+      return;
+    }
     const { data } = await axios.post('http://localhost:8000/note/create', {
       title: values.title,
       description: values.description,
@@ -68,8 +89,19 @@ const App = () => {
         </div>
       </form>
       {notes.map((note) => {
-        console.log(note);
-        return <NoteItem title={note.title} key={note.id} />;
+        return (
+          <NoteItem
+            onEditClick={() => {
+              setValues({
+                title: note.title,
+                description: note.description || '',
+              });
+              setSelectedId(note.id);
+            }}
+            title={note.title}
+            key={note.id}
+          />
+        );
       })}
     </div>
   );
