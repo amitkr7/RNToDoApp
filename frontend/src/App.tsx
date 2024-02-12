@@ -51,6 +51,19 @@ const App = () => {
     setValues({ title: '', description: '' });
   };
 
+  const handleNoteDelete = async (note: {
+    id: string;
+    title?: string;
+    description?: string | undefined;
+  }) => {
+    const result = confirm('Are You Sure?');
+    if (result) {
+      await axios.delete('http://localhost:8000/note/' + note.id);
+    }
+    const updatedNotes = notes.filter(({ id }) => id !== note.id);
+    setNotes([...updatedNotes]);
+  };
+
   useEffect(() => {
     const fetchNotes = async () => {
       const { data } = await axios('http://localhost:8000/note');
@@ -100,6 +113,7 @@ const App = () => {
             }}
             title={note.title}
             key={note.id}
+            onDeleteClick={() => handleNoteDelete(note)}
           />
         );
       })}
