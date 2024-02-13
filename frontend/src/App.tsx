@@ -7,12 +7,17 @@ import {
 } from 'react';
 import NoteItem from './components/NoteItem';
 
+type noteType = {
+  id: string;
+  title: string;
+  description?: string;
+};
+
 const App = () => {
-  const [notes, setNotes] = useState<
-    { id: string; title: string; description?: string }[]
-  >([]);
+  const [notes, setNotes] = useState<noteType[]>([]);
   const [values, setValues] = useState({ title: '', description: '' });
   const [selectedId, setSelectedId] = useState('');
+  const [noteToView, setNoteToView] = useState<noteType>();
 
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -114,6 +119,16 @@ const App = () => {
             title={note.title}
             key={note.id}
             onDeleteClick={() => handleNoteDelete(note)}
+            onViewClick={() => {
+              if (noteToView) {
+                setNoteToView(undefined);
+              } else {
+                setNoteToView(note);
+              }
+            }}
+            description={
+              noteToView?.id === note.id ? noteToView?.description : ''
+            }
           />
         );
       })}
